@@ -12,25 +12,24 @@
     <style>
         body {
             margin: 0;
-            overflow: hidden;
             font-family: 'Inter', sans-serif;
-            height: 100vh;
+            min-height: 100vh;
             touch-action: manipulation;
-             background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e);
+            overflow-x: hidden;
         }
 
         #app {
             position: relative;
             width: 100%;
-            height: 100%;
-            overflow: hidden;
+            min-height: 100vh;
         }
 
         #content {
             position: relative;
             z-index: 10;
             width: 100%;
-            height: 100%;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -53,11 +52,16 @@
             transform: translateY(20px);
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateY(20px);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .step.active {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate(-50%, -50%);
             pointer-events: all;
         }
 
@@ -326,6 +330,13 @@
         }
 
         @media (max-width: 768px) {
+            .step {
+                padding: 20px;
+                margin: 10px;
+                max-height: 85vh;
+                width: calc(100% - 20px);
+            }
+            
             .photo-gallery {
                 grid-template-columns: 1fr;
                 gap: 15px;
@@ -334,6 +345,77 @@
             
             .photo-item img {
                 height: 250px;
+            }
+            
+            .btn, .btn-secondary {
+                padding: 10px 20px;
+                font-size: 14px;
+                margin: 5px;
+            }
+            
+            .button-container {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .text-4xl, .text-5xl {
+                font-size: 1.875rem !important;
+            }
+            
+            .text-3xl {
+                font-size: 1.5rem !important;
+            }
+            
+            .emoji {
+                font-size: 2.5rem;
+            }
+            
+            .reason-card {
+                margin: 5px;
+                padding: 15px;
+            }
+            
+            .memory-container {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .step {
+                padding: 15px;
+                margin: 5px;
+                max-height: 80vh;
+                width: calc(100% - 10px);
+            }
+            
+            .btn, .btn-secondary {
+                padding: 8px 16px;
+                font-size: 13px;
+                margin: 3px;
+            }
+            
+            .text-xl {
+                font-size: 1.125rem !important;
+            }
+            
+            .text-lg {
+                font-size: 1rem !important;
+            }
+        }
+
+        /* Desktop optimization - ensure no unnecessary scrolling */
+        @media (min-width: 769px) {
+            .step {
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            body {
+                overflow: hidden;
+            }
+            
+            #app {
+                overflow: hidden;
             }
         }
     </style>
