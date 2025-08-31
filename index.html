@@ -534,6 +534,29 @@
                 </div>
                 <p class="mt-8 text-gray-500">Made with ❤️ just for you</p>
             </div>
+
+            <!-- Step 6: QR Code Page -->
+            <div class="step" id="step6">
+                <div class="emoji">🎁</div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gradient">Special Offer!</h2>
+                <p class="text-lg text-gray-700 mb-6">
+                    Wow! kamu menemukan bagian rahasiaa! 🎉
+                </p>
+                
+                <div class="qr-container" style="background: white; padding: 20px; border-radius: 15px; margin: 20px auto; max-width: 300px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);">
+                    <img src="zUZSeM_qrcode.png" alt="QR Code" style="width: 250px; height: 250px; border-radius: 10px; display: block; margin: 0 auto;">
+                </div>
+                
+                <h3 class="text-2xl font-bold mb-4 text-yellow-500">Mau join Etsy aku gak?</h3>
+                <p class="text-lg text-gray-700 mb-8">
+                    Kalau mau, harap scan qrcodenya nanti request email access, tolong untuk pesannya isi dengan kritik dan saran untuk mini web ini yaaa! 😊
+                </p>
+                
+                <div class="button-container">
+                    <button class="btn-secondary" id="back-btn-6">← Back to Celebration</button>
+                    <button class="btn" id="restart-btn">Start Over</button>
+                </div>
+            </div>
         </div>
 
         <!-- Password Popup -->
@@ -697,10 +720,15 @@
 
         // Step Navigation
         let currentStep = 1;
-        const totalSteps = 5;
+        const totalSteps = 6; // Updated to include QR code page
+        let celebrateClickCount = 0;
 
         function updateProgressBar() {
-            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            // Only show progress for main steps (1-5), not the secret QR page
+            const mainSteps = 5;
+            const progress = currentStep <= mainSteps ? 
+                ((currentStep - 1) / (mainSteps - 1)) * 100 : 
+                100;
             document.getElementById('progress-bar').style.width = `${progress}%`;
         }
 
@@ -713,13 +741,25 @@
             // Show current step
             document.getElementById(`step${stepNumber}`).classList.add('active');
 
+            // Reset click counter when leaving step 5
+            if (currentStep !== 5 && celebrateClickCount > 0) {
+                resetCelebrateCounter();
+            }
+
+            // Update current step
+            currentStep = stepNumber;
+
             // Update progress bar
             updateProgressBar();
 
             // Special effect for last step
-            if (stepNumber === totalSteps) {
+            if (stepNumber === 5) {
                 document.getElementById('confetti-btn').classList.add('animate-pulse');
             }
+        }
+
+        function resetCelebrateCounter() {
+            celebrateClickCount = 0;
         }
 
         // Password functionality
@@ -828,8 +868,23 @@
             showStep(currentStep);
         });
 
-        // Confetti button
+        // QR Code page navigation
+        document.getElementById('back-btn-6').addEventListener('click', () => {
+            currentStep = 5;
+            showStep(currentStep);
+        });
+
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            currentStep = 1;
+            showStep(currentStep);
+            resetCelebrateCounter();
+        });
+
+        // Enhanced Confetti button with hidden click counter (easter egg)
         document.getElementById('confetti-btn').addEventListener('click', () => {
+            // Increment click counter (hidden)
+            celebrateClickCount++;
+
             // Standard confetti with space colors
             confetti({
                 particleCount: 150,
@@ -884,6 +939,26 @@
                     ease: "power1.out"
                 });
             });
+
+            // Check if we've reached 8 clicks
+            if (celebrateClickCount >= 8) {
+                // Extra special confetti for reaching 8 clicks
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 200,
+                        spread: 100,
+                        origin: { y: 0.4 },
+                        colors: ['#ffd700', '#ffed4e', '#c0c0c0', '#ffffff'],
+                        shapes: ['star']
+                    });
+                }, 1000);
+
+                // Navigate to QR code page after a short delay
+                setTimeout(() => {
+                    currentStep = 6;
+                    showStep(currentStep);
+                }, 2000);
+            }
         });
 
         // Initialize progress bar
